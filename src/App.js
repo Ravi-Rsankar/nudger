@@ -14,7 +14,7 @@ function App() {
   }, [])
 
   const _init = () => {
-    const c = mqtt.connect("test.mosquitto.org", Number(8080), "mqtt", _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
+    const c = mqtt.connect(process.env.REACT_APP_WS_HOST, Number(process.env.REACT_APP_WS_PORT), "mqtt", _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
     setClient(c);
   }
 
