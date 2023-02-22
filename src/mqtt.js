@@ -1,41 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import mqtt from 'mqtt';
+import React, { useState, useEffect } from 'react';
+import { client } from 'paho-mqtt';
 
-const MQTT_BROKER_URL = 'ws://mqtt-broker.example.com:9001'; // Replace with your MQTT broker URL
-const MQTT_TOPIC = 'my/topic'; // Replace with your MQTT topic
-
-function MyComponent() {
+const MQTTComponent = () => {
     const [mqttClient, setMqttClient] = useState(null);
-    const [message, setMessage] = useState('');
 
     useEffect(() => {
-        const client = mqtt.connect(MQTT_BROKER_URL);
+        const newClient = new client('ws://broker.example.com:9001/ws', 'clientId');
+        newClient.onConnectionLost = onConnectionLost;
+        newClient.onMessageArrived = onMessageArrived;
+        newClient.connect({ onSuccess: onConnect });
 
-        client.on('connect', () => {
-            console.log('MQTT client connected');
-            client.subscribe(MQTT_TOPIC);
-        });
-
-        client.on('message', (topic, payload) => {
-            console.log(`Received message on topic ${topic}: ${payload.toString()}`);
-            setMessage(payload.toString());
-        });
-
-        setMqttClient(client);
-
-        return () => {
-            if (client) {
-                client.end();
-            }
-        };
+        setMqttClient(newClient);
     }, []);
+
+    const onConnect = () => {
+        console.log('Connected to MQTT broker');
+        mqttClient.subscribe('my/topic');
+    };
+
+    const onConnectionLost = (responseObject) => {
+        console.log('Connection lost: ' + responseObject.errorMessage);
+    };
+
+    const onMessageArrived = (message) => {
+        console.log('Message received: ' + message.payloadString);
+    };
+
+    const handleButtonClick = () => {
+        const message = new Message('Hello, MQTT!');
+        message.destinationName = 'my/topic';
+        mqttClient.send(message);
+    };
 
     return (
         <div>
-            <h1>MQTT Example</h1>
-            <p>Message received: {message}</p>
+            <button onClick={handleButtonClick}>Publish message</button>
         </div>
     );
-}
+};
 
-export default MyComponent;
+export default MQTTComponent;
