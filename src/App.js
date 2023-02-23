@@ -3,64 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 
 import * as mqtt from 'react-paho-mqtt';
+import { _initMQTT, _onSubscribe, _publishPayload } from './services/mqtt/MQTTHandler';
 
 function App() {
   const [client, setClient] = React.useState(null);
   const _topic = ["Hello"];
-  const _options = {};
+  const _payload = "World!";
 
   React.useEffect(() => {
-    _init();
+    const _client = _initMQTT(mqtt, process.env.REACT_APP_WS_HOST, Number(process.env.REACT_APP_WS_PORT));
+    setClient(_client)
   }, [])
-
-  const _init = () => {
-    const c = mqtt.connect(process.env.REACT_APP_WS_HOST, Number(process.env.REACT_APP_WS_PORT), "mqtt", _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
-    setClient(c);
-  }
-
-  // called when sending payload
-  const _sendPayload = () => {
-    const payload = mqtt.parsePayload("Hello", "World"); // topic, payload
-    console.log(payload)
-    client.send(payload);
-  }
-
-  // called when client lost connection
-  const _onConnectionLost = responseObject => {
-    if (responseObject.errorCode !== 0) {
-      console.log("onConnectionLost: " + responseObject.errorMessage);
-    }
-  }
-
-  // called when messages arrived
-  const _onMessageArrived = message => {
-    console.log("onMessageArrived: " + message.payloadString);
-  }
-
-
-  // called when subscribing topic(s)
-  const _onSubscribe = () => {
-    client.connect({
-      onSuccess: () => {
-        for (var i = 0; i < _topic.length; i++) {
-          client.subscribe(_topic[i], _options);
-        }
-      }
-    }); // called when the client connects
-  }
-
-  // called when subscribing topic(s)
-  const _onUnsubscribe = () => {
-    for (var i = 0; i < _topic.length; i++) {
-      client.unsubscribe(_topic[i], _options);
-    }
-  }
-
-  // called when disconnecting the client
-  const _onDisconnect = () => {
-    client.disconnect();
-  }
-
 
   return (
     <div className="App">
@@ -71,12 +24,12 @@ function App() {
         </p>
         <button
           style={{ color: 'white' }}
-          onClick={_onSubscribe}>
+          onClick={() => _onSubscribe(client, _topic)}>
           <h1>Subscribe Topic</h1>
         </button>
         <button
           style={{ color: 'white' }}
-          onClick={_sendPayload}>
+          onClick={() => _publishPayload(client, _topic[0], _payload)}>
           <h1>Send Message</h1>
         </button>
       </header>
