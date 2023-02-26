@@ -14,24 +14,25 @@ function App() {
     useEffect(() => {
         const _client = _initMQTT(mqtt, process.env.REACT_APP_WS_HOST, Number(process.env.REACT_APP_WS_PORT));
         setClient(_client)
+        _onSubscribe(client, _topic)
     }, [])
 
     return (
         <div className="App">
-            <div>
+            <div className='search-container'>
                 <SearchBox />
             </div>
             <header className="App-header">
-                <button
+                {/* <button
                     style={{ color: 'white' }}
                     onClick={() => _onSubscribe(client, _topic)}>
                     <h1>Subscribe Topic</h1>
-                </button>
-                <button
+                </button> */}
+                {/* <button
                     style={{ color: 'white' }}
                     onClick={() => _publishPayload(client, _topic[0], _payload)}>
                     <h1>Send Message</h1>
-                </button>
+                </button> */}
             </header>
         </div>
     );

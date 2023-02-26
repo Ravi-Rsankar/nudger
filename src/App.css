@@ -36,40 +36,43 @@
     transform: rotate(360deg);
   }
 }
-
 .search-container {
-    position: relative;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 20px;
+    width: 300px;
   }
   
-  input[type="text"] {
+  .search-container input[type="text"] {
     width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
+    height: 40px;
+    font-size: 16px;
+    padding: 10px;
     border: none;
-    border-bottom: 2px solid #ccc;
-  }
-  
-  input[type="text"]:focus {
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     outline: none;
-    border-bottom: 2px solid #4CAF50;
   }
   
   .search-results {
     position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
+    top: 40px;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
     background-color: #fff;
     border: 1px solid #ccc;
     border-top: none;
-    max-height: 200px;
-    overflow-y: auto;
     z-index: 1;
+    overflow-y: auto;
   }
   
   .search-results li {
-    padding: 12px 20px;
+    padding: 10px;
     cursor: pointer;
   }
   
