@@ -14,7 +14,7 @@ function App() {
     useEffect(() => {
         const _client = _initMQTT(mqtt, process.env.REACT_APP_WS_HOST, Number(process.env.REACT_APP_WS_PORT));
         setClient(_client)
-        _onSubscribe(client, _topic)
+        _onSubscribe(_client, _topic)
     }, [])
 
     return (
