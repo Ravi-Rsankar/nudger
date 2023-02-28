@@ -70,10 +70,7 @@
 .search-results li:hover {
     background-color: #f2f2f2;
 }
-ul {
-    list-style: none;
-    text-align: left;
-}
 .search-container ul {
     text-align: left !important;
+    list-style: none;
 }
